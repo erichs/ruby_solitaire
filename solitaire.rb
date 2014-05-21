@@ -14,7 +14,7 @@ class Solitaire
   private
     def initialize_deck
       values = ['A', ('2'..'10').to_a, 'J', 'Q', 'K'].flatten
-      suits  = ['C', 'H', 'S', 'D']
+      suits  = ['C', 'D', 'H', 'S']
       deck = []
       suits.each do |suit|
         deck << values.map { |value| value + suit }

@@ -13,9 +13,9 @@ describe Solitaire do
     deck = Solitaire.new.deck
     deck.count.must_equal 54
     deck.include?('AC').must_equal true
+    deck.include?('AD').must_equal true
     deck.include?('AH').must_equal true
     deck.include?('AS').must_equal true
-    deck.include?('AD').must_equal true
   end
 
   it "breaks a string into 5 character, padded blocks" do
