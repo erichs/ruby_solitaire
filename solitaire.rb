@@ -22,13 +22,19 @@ end
 class Deck
   attr_accessor :cards
 
-  def initialize
-    @cards = []
+  def initialize( key_method = -> { Deck.unkeyed_positions } )
+    @cards = key_method.call
+  end
+
+  def self.unkeyed_positions
+    cards = []
     names = ['A', ('2'..'10').to_a, 'J', 'Q', 'K'].flatten
     suits  = ['C', 'D', 'H', 'S']
     suits.each do |suit|
-      @cards << names.map { |name| name + suit }
+      cards << names.map { |name| name + suit }
     end
-    @cards = (@cards + ['JokerA', 'JokerB']).flatten
+    cards = (cards + ['JokerA', 'JokerB']).flatten
   end
+  private
+
 end

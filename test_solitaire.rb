@@ -18,6 +18,10 @@ describe Deck do
     cards.include?('AS').must_equal true
   end
 
+  it "accepts a key method for deck randomization" do
+    cards = Deck.new(-> { Deck.unkeyed_positions.reverse }).cards
+    cards.first.must_equal "JokerB"
+  end
 end
 
 describe Solitaire do
