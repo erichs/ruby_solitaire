@@ -1,8 +1,8 @@
 class Solitaire
   attr_reader :deck
 
-  def initialize
-    @deck = initialize_deck
+  def initialize( deck )
+    @deck = deck
   end
 
   def display_block( text )
@@ -11,14 +11,24 @@ class Solitaire
     chunks.join " "
   end
 
-  private
-    def initialize_deck
-      values = ['A', ('2'..'10').to_a, 'J', 'Q', 'K'].flatten
-      suits  = ['C', 'D', 'H', 'S']
-      deck = []
-      suits.each do |suit|
-        deck << values.map { |value| value + suit }
-      end
-      (deck + ['ZA', 'ZB']).flatten
+  def card_to_number( card )
+    base_values = {'A'=>1, '2'=>2, '3'=>3, '4'=>4, '5'=>5, '6'=>6, '7'=>7, '8'=>8, '9'=>9, '10'=>10, 'J'=>11, 'Q'=>12, 'K'=>13}
+    modifiers = {'C'=>0, 'D'=> 13, 'H'=>26, 'S'=>39}
+    name, suit = card.scan(/(.*)(.$)/).flatten
+    base_values[name] + modifiers[suit] % 26
+  end
+end
+
+class Deck
+  attr_accessor :cards
+
+  def initialize
+    @cards = []
+    names = ['A', ('2'..'10').to_a, 'J', 'Q', 'K'].flatten
+    suits  = ['C', 'D', 'H', 'S']
+    suits.each do |suit|
+      @cards << names.map { |name| name + suit }
     end
+    @cards = (@cards + ['JokerA', 'JokerB']).flatten
+  end
 end
