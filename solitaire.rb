@@ -38,6 +38,18 @@ class Deck
     @cards.insert(newpos, card)
   end
 
+  def triple_cut!
+    deck_size = @cards.count
+
+    # positions of first and second jokers from top of deck
+    first, second = [@cards.index("JokerA"), @cards.index("JokerB")].sort
+
+    top_cut = @cards.shift first
+    bottom_cut = @cards.pop deck_size - second - 1
+
+    @cards = bottom_cut + @cards + top_cut
+  end
+
   def count_cut!(number)
     cut = @cards.shift number
     @cards.insert(-2, *cut)
