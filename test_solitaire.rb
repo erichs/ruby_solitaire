@@ -42,6 +42,27 @@ describe Deck do
     deck.move_down!("JokerA", 2)
     deck.cards.must_equal [ "AC", "JokerA", "3H", "2D" ]
   end
+
+  it "performs a 'count cut': displacing N cards from the top to just above the bottom card" do
+    s = Solitaire.new Deck.new(->{ [ "4C", "3C", "AC", "2C" ] })
+    deck = s.deck
+    deck.count_cut! s.card_to_number(deck.cards.last)
+    deck.cards.must_equal [ "AC", "4C", "3C", "2C" ]
+  end
+
+  it "performs a 'triple cut' around the Jokers" do
+    deck = Deck.new(->{["7C", "9H", "AC", "4S", "KS", "AS", "JD", "JokerA", "2H", "2S", "QH", "3S", "AD", "KD", "7S", "3H", "9C", "6C", "3D", "QC", "6H", "8S", "JS", "8D", "JH", "10S", "KC", "6S", "4H", "5C", "2C", "6D", "5S", "8C", "10D", "10H", "4D", "AH", "5D", "9S", "3C", "7H", "7D", "4C", "JC", "8H", "2D", "KH", "10C", "9D", "JokerB", "5H", "QD", "QS"]})
+    deck.triple_cut!
+    deck.cards.must_equal ["5H", "QD", "QS", "JokerA", "2H", "2S", "QH", "3S", "AD", "KD", "7S", "3H", "9C", "6C", "3D", "QC", "6H", "8S", "JS", "8D", "JH", "10S", "KC", "6S", "4H", "5C", "2C", "6D", "5S", "8C", "10D", "10H", "4D", "AH", "5D", "9S", "3C", "7H", "7D", "4C", "JC", "8H", "2D", "KH", "10C", "9D", "JokerB", "7C", "9H", "AC", "4S", "KS", "AS", "JD"]
+
+    deck = Deck.new(->{["JokerB", "5H", "8D", "7S", "AC", "JokerA", "3S", "9S"]})
+    deck.triple_cut!
+    deck.cards.must_equal ["3S", "9S", "JokerB", "5H", "8D", "7S", "AC", "JokerA"]
+
+    deck = Deck.new(->{["JokerB", "5H", "8D", "7S", "AC", "JokerA"]})
+    deck.triple_cut!
+    deck.cards.must_equal ["JokerB", "5H", "8D", "7S", "AC", "JokerA"]
+  end
 end
 
 describe Solitaire do

@@ -1,5 +1,5 @@
 class Solitaire
-  attr_reader :deck
+  attr_accessor :deck
 
   def initialize( deck )
     @deck = deck
@@ -36,6 +36,11 @@ class Deck
     newpos > @cards.count && newpos = (offset % @cards.count) - 1
 
     @cards.insert(newpos, card)
+  end
+
+  def count_cut!(number)
+    cut = @cards.shift number
+    @cards.insert(-2, *cut)
   end
 
   def self.unkeyed_positions
