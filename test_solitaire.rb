@@ -127,4 +127,14 @@ describe Solitaire do
     s.generate_keystream_number!.must_equal 4
     s.generate_keystream_number!.must_equal 33
   end
+
+  it "enciphers a plaintext" do
+    s = Solitaire.new( Deck.new, "AAAAAAAAAA" )
+    s.display_block(s.cipher(:encrypt)).must_equal "EXKYI ZSGEH"
+  end
+
+  it "deciphers a ciphertext" do
+    s = Solitaire.new( Deck.new, "EXKYI ZSGEH" )
+    s.display_block(s.cipher(:decrypt)).must_equal "AAAAA AAAAA"
+  end
 end

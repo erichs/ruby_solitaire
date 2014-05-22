@@ -3,10 +3,30 @@ class JokerInOutput < Exception; end
 class Solitaire
   attr_accessor :deck
 
-  def initialize( deck )
+  def initialize( deck, text="" )
+    @text = text.gsub(' ', '').upcase
     @deck = deck
     @alphanum = Hash[("A".."Z").to_a.zip((1..26).to_a)]
     @numalpha = @alphanum.invert
+  end
+
+  def cipher( direction )
+    cipher = ""
+    @text.split(//).each do |letter|
+      stream_number = generate_keystream_number!
+      letter_number = letter_to_number letter
+
+      if direction == :encrypt
+        ciphered_number = (letter_number + stream_number) % 26
+      else
+        ciphered_number = (letter_number - stream_number) % 26
+      end
+      # adjust for Z=26, which has modulus of zero...
+      ciphered_number = 26 if ciphered_number == 0
+
+      cipher += number_to_letter ciphered_number
+    end
+    cipher
   end
 
   def display_block( text )
