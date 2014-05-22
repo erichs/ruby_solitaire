@@ -22,6 +22,26 @@ describe Deck do
     cards = Deck.new(-> { Deck.unkeyed_positions.reverse }).cards
     cards.first.must_equal "JokerB"
   end
+
+  it "performs a cyclic downward move of a named card by 1" do
+    deck = Solitaire.new(Deck.new(->{ [ "AC", "JokerA", "3H", "2D" ] })).deck
+    deck.move_down!("JokerA", 1)
+    deck.cards.must_equal [ "AC", "3H", "JokerA", "2D" ]
+
+    deck = Solitaire.new(Deck.new(->{ [ "AC", "3H", "JokerA", "2D" ] })).deck
+    deck.move_down!("JokerA", 1)
+    deck.cards.must_equal [ "AC", "3H", "2D", "JokerA" ]
+  end
+
+  it "performs a cyclic downward move of a named card by 2" do
+    deck = Solitaire.new(Deck.new(->{ [ "AC", "JokerA", "3H", "2D", "4S" ] })).deck
+    deck.move_down!("JokerA", 2)
+    deck.cards.must_equal [ "AC", "3H", "2D", "JokerA", "4S" ]
+
+    deck = Solitaire.new(Deck.new(->{ [ "AC", "3H", "JokerA", "2D" ] })).deck
+    deck.move_down!("JokerA", 2)
+    deck.cards.must_equal [ "AC", "JokerA", "3H", "2D" ]
+  end
 end
 
 describe Solitaire do
@@ -47,5 +67,7 @@ describe Solitaire do
     s.card_to_number("JH").must_equal (11 + 26) % 26
     s.card_to_number("QS").must_equal (12 + 39) % 26
     s.card_to_number("KC").must_equal (13 + 0) % 26
+    s.card_to_number("JokerA").must_equal 53
+    s.card_to_number("JokerB").must_equal 53
   end
 end
