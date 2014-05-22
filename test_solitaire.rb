@@ -74,6 +74,13 @@ describe Solitaire do
     proc{s.letter_to_number(":")}.must_raise ArgumentError, :NotALetter
   end
 
+  it "converts numbers to letters" do
+    s = Solitaire.new( Deck.new )
+    s.number_to_letter(1).must_equal "A"
+    s.number_to_letter(26).must_equal "Z"
+    proc{s.number_to_letter(27)}.must_raise ArgumentError, :NotAValidNumber
+  end
+
   it "breaks a string into 5 character, padded blocks" do
     s = Solitaire.new( Deck.new )
     s.display_block("CODEINRUBYLIVELONGER").must_equal "CODEI NRUBY LIVEL ONGER"

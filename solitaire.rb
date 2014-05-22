@@ -4,6 +4,7 @@ class Solitaire
   def initialize( deck )
     @deck = deck
     @alphanum = Hash[("A".."Z").to_a.zip((1..26).to_a)]
+    @numalpha = @alphanum.invert
   end
 
   def display_block( text )
@@ -24,6 +25,11 @@ class Solitaire
     letter = letter.upcase
     raise ArgumentError, :NotALetter unless ("A".."Z").include? letter
     @alphanum[letter]
+  end
+
+  def number_to_letter( number )
+    raise ArgumentError, :NotAValidNumber unless (1..26).include? number
+    @numalpha[number]
   end
 end
 
