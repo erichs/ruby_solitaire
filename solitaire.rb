@@ -45,7 +45,9 @@ class Solitaire
     @deck.move_down! "JokerB", 2
     @deck.triple_cut!
     @deck.count_cut! card_to_number(deck.cards.last)
-    card_to_number(@deck.cards.first)
+    card_to_number(find_output_card)
+  rescue JokerInOutput
+    retry
   end
 end
 

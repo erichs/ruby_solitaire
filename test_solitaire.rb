@@ -114,8 +114,8 @@ describe Solitaire do
     proc{s.find_output_card}.must_raise JokerInOutput
   end
 
-#  it "generates a keystream number" do
-#    s = Solitaire.new( Deck.new )
-#    s.generate_keystream_number!.must_equal 4
-#  end
+  it "generates a keystream number" do
+    s = Solitaire.new( Deck.new )
+    s.generate_keystream_number!.must_equal 4
+  end
 end
