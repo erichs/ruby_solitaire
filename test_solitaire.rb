@@ -45,7 +45,7 @@ describe Deck do
 
   it "performs a 'count cut': displacing N cards from the top to just above the bottom card" do
     deck = Deck.new(->{ [ "4C", "3C", "AC", "2C" ] })
-    deck.count_cut! Solitaire.new.card_to_number(deck.cards.last)
+    deck.count_cut!
     deck.cards.must_equal [ "AC", "4C", "3C", "2C" ]
   end
 
@@ -62,6 +62,26 @@ describe Deck do
     deck.triple_cut!
     deck.cards.must_equal ["JokerB", "5H", "8D", "7S", "AC", "JokerA"]
   end
+
+  it "maps cards to numbers" do
+    deck = Deck.new
+    deck.card_to_number("AC").must_equal (1 + 0)
+    deck.card_to_number("2D").must_equal (2 + 13)
+    deck.card_to_number("3H").must_equal (3 + 26)
+    deck.card_to_number("4S").must_equal (4 + 39)
+    deck.card_to_number("5C").must_equal (5 + 0)
+    deck.card_to_number("6D").must_equal (6 + 13)
+    deck.card_to_number("7H").must_equal (7 + 26)
+    deck.card_to_number("8S").must_equal (8 + 39)
+    deck.card_to_number("9C").must_equal (9 + 0)
+    deck.card_to_number("10D").must_equal (10 + 13)
+    deck.card_to_number("JH").must_equal (11 + 26)
+    deck.card_to_number("QS").must_equal (12 + 39)
+    deck.card_to_number("KC").must_equal (13 + 0)
+    deck.card_to_number("JokerA").must_equal 53
+    deck.card_to_number("JokerB").must_equal 53
+  end
+
 end
 
 describe Solitaire do
@@ -86,24 +106,6 @@ describe Solitaire do
     s.display_block("DRINKYOUROVALTINE").must_equal "DRINK YOURO VALTI NEXXX"
   end
 
-  it "maps cards to numbers" do
-    s = Solitaire.new
-    s.card_to_number("AC").must_equal (1 + 0)
-    s.card_to_number("2D").must_equal (2 + 13)
-    s.card_to_number("3H").must_equal (3 + 26)
-    s.card_to_number("4S").must_equal (4 + 39)
-    s.card_to_number("5C").must_equal (5 + 0)
-    s.card_to_number("6D").must_equal (6 + 13)
-    s.card_to_number("7H").must_equal (7 + 26)
-    s.card_to_number("8S").must_equal (8 + 39)
-    s.card_to_number("9C").must_equal (9 + 0)
-    s.card_to_number("10D").must_equal (10 + 13)
-    s.card_to_number("JH").must_equal (11 + 26)
-    s.card_to_number("QS").must_equal (12 + 39)
-    s.card_to_number("KC").must_equal (13 + 0)
-    s.card_to_number("JokerA").must_equal 53
-    s.card_to_number("JokerB").must_equal 53
-  end
 
   it "finds an output card" do
     s = Solitaire.new( :deck => Deck.new(->{["AC", "2D", "3H"]}) )

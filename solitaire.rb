@@ -33,14 +33,6 @@ class Solitaire
     chunks.join " "
   end
 
-  def card_to_number( card )
-    name, suit = card.scan(/(.*)(.$)/).flatten
-    return 53 if name == 'Joker'
-    base_values = {'A'=>1, '2'=>2, '3'=>3, '4'=>4, '5'=>5, '6'=>6, '7'=>7, '8'=>8, '9'=>9, '10'=>10, 'J'=>11, 'Q'=>12, 'K'=>13}
-    modifiers = {'C'=>0, 'D'=> 13, 'H'=>26, 'S'=>39}
-    base_values[name] + modifiers[suit]
-  end
-
   def letter_to_number( letter )
     letter = letter.upcase
     raise ArgumentError, :NotALetter unless ("A".."Z").include? letter
@@ -53,7 +45,7 @@ class Solitaire
   end
 
   def find_output_card
-    @deck.cards[card_to_number(@deck.cards.first)].tap do |card|
+    @deck.cards[@deck.card_to_number(@deck.cards.first)].tap do |card|
       raise JokerInOutput if !!card.match(/Joker/)
     end
   end
@@ -62,8 +54,8 @@ class Solitaire
     @deck.move_down! "JokerA", 1
     @deck.move_down! "JokerB", 2
     @deck.triple_cut!
-    @deck.count_cut! card_to_number(deck.cards.last)
-    card_to_number(find_output_card)
+    @deck.count_cut!
+    @deck.card_to_number(find_output_card)
   rescue JokerInOutput
     retry
   end
@@ -99,8 +91,16 @@ class Deck
     @cards = bottom_cut + @cards + top_cut
   end
 
-  def count_cut!(number)
-    cut = @cards.shift number
+  def card_to_number( card )
+    name, suit = card.scan(/(.*)(.$)/).flatten
+    return 53 if name == 'Joker'
+    base_values = {'A'=>1, '2'=>2, '3'=>3, '4'=>4, '5'=>5, '6'=>6, '7'=>7, '8'=>8, '9'=>9, '10'=>10, 'J'=>11, 'Q'=>12, 'K'=>13}
+    modifiers = {'C'=>0, 'D'=> 13, 'H'=>26, 'S'=>39}
+    base_values[name] + modifiers[suit]
+  end
+
+  def count_cut!
+    cut = @cards.shift card_to_number @cards.last
     @cards.insert(-2, *cut)
   end
 
