@@ -3,10 +3,11 @@ class Solitaire
 
   def initialize( deck )
     @deck = deck
+    @alphanum = Hash[("A".."Z").to_a.zip((1..26).to_a)]
   end
 
   def display_block( text )
-    chunks = text.scan /.{1,5}/
+    chunks = text.scan(/.{1,5}/)
     chunks[-1] = chunks.last.ljust(5, "X")
     chunks.join " "
   end
@@ -17,6 +18,12 @@ class Solitaire
     base_values = {'A'=>1, '2'=>2, '3'=>3, '4'=>4, '5'=>5, '6'=>6, '7'=>7, '8'=>8, '9'=>9, '10'=>10, 'J'=>11, 'Q'=>12, 'K'=>13}
     modifiers = {'C'=>0, 'D'=> 13, 'H'=>26, 'S'=>39}
     base_values[name] + modifiers[suit] % 26
+  end
+
+  def letter_to_number( letter )
+    letter = letter.upcase
+    raise ArgumentError, :NotALetter unless ("A".."Z").include? letter
+    @alphanum[letter]
   end
 end
 
