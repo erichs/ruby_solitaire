@@ -28,15 +28,12 @@ class Deck
     @cards = key_method.call
   end
 
-  require 'debugger'
   def move_down!(card, offset)
     cardpos = @cards.index card
     @cards.delete_at(cardpos)
 
     newpos = cardpos + offset
-    if newpos > @cards.count
-      newpos = (offset % @cards.count) - 1
-    end
+    newpos > @cards.count && newpos = (offset % @cards.count) - 1
 
     @cards.insert(newpos, card)
   end
