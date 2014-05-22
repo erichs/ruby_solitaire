@@ -89,19 +89,19 @@ describe Solitaire do
 
   it "maps cards to numbers" do
     s = Solitaire.new( Deck.new )
-    s.card_to_number("AC").must_equal (1 + 0) % 26
-    s.card_to_number("2D").must_equal (2 + 13) % 26
-    s.card_to_number("3H").must_equal (3 + 26) % 26
-    s.card_to_number("4S").must_equal (4 + 39) % 26
-    s.card_to_number("5C").must_equal (5 + 0) % 26
-    s.card_to_number("6D").must_equal (6 + 13) % 26
-    s.card_to_number("7H").must_equal (7 + 26) % 26
-    s.card_to_number("8S").must_equal (8 + 39) % 26
-    s.card_to_number("9C").must_equal (9 + 0) % 26
-    s.card_to_number("10D").must_equal (10 + 13) % 26
-    s.card_to_number("JH").must_equal (11 + 26) % 26
-    s.card_to_number("QS").must_equal (12 + 39) % 26
-    s.card_to_number("KC").must_equal (13 + 0) % 26
+    s.card_to_number("AC").must_equal (1 + 0)
+    s.card_to_number("2D").must_equal (2 + 13)
+    s.card_to_number("3H").must_equal (3 + 26)
+    s.card_to_number("4S").must_equal (4 + 39)
+    s.card_to_number("5C").must_equal (5 + 0)
+    s.card_to_number("6D").must_equal (6 + 13)
+    s.card_to_number("7H").must_equal (7 + 26)
+    s.card_to_number("8S").must_equal (8 + 39)
+    s.card_to_number("9C").must_equal (9 + 0)
+    s.card_to_number("10D").must_equal (10 + 13)
+    s.card_to_number("JH").must_equal (11 + 26)
+    s.card_to_number("QS").must_equal (12 + 39)
+    s.card_to_number("KC").must_equal (13 + 0)
     s.card_to_number("JokerA").must_equal 53
     s.card_to_number("JokerB").must_equal 53
   end
@@ -117,5 +117,14 @@ describe Solitaire do
   it "generates a keystream number" do
     s = Solitaire.new( Deck.new )
     s.generate_keystream_number!.must_equal 4
+    s.generate_keystream_number!.must_equal 49
+    s.generate_keystream_number!.must_equal 10
+    s.generate_keystream_number!.must_equal 24
+    s.generate_keystream_number!.must_equal 8
+    s.generate_keystream_number!.must_equal 51
+    s.generate_keystream_number!.must_equal 44
+    s.generate_keystream_number!.must_equal 6
+    s.generate_keystream_number!.must_equal 4
+    s.generate_keystream_number!.must_equal 33
   end
 end
