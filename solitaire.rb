@@ -1,3 +1,5 @@
+class JokerInOutput < Exception; end
+
 class Solitaire
   attr_accessor :deck
 
@@ -30,6 +32,20 @@ class Solitaire
   def number_to_letter( number )
     raise ArgumentError, :NotAValidNumber unless (1..26).include? number
     @numalpha[number]
+  end
+
+  def find_output_card
+    @deck.cards[card_to_number(@deck.cards.first)].tap do |card|
+      raise JokerInOutput if !!card.match(/Joker/)
+    end
+  end
+
+  def generate_keystream_number!
+    @deck.move_down! "JokerA", 1
+    @deck.move_down! "JokerB", 2
+    @deck.triple_cut!
+    @deck.count_cut! card_to_number(deck.cards.last)
+    card_to_number(@deck.cards.first)
   end
 end
 

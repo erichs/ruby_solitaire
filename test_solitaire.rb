@@ -105,4 +105,17 @@ describe Solitaire do
     s.card_to_number("JokerA").must_equal 53
     s.card_to_number("JokerB").must_equal 53
   end
+
+  it "finds an output card" do
+    s = Solitaire.new( Deck.new(->{["AC", "2D", "3H"]}) )
+    s.find_output_card.must_equal "2D"
+
+    s = Solitaire.new( Deck.new(->{["2C", "2D", "JokerA", "3H"]}) )
+    proc{s.find_output_card}.must_raise JokerInOutput
+  end
+
+#  it "generates a keystream number" do
+#    s = Solitaire.new( Deck.new )
+#    s.generate_keystream_number!.must_equal 4
+#  end
 end
