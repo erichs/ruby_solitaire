@@ -1,5 +1,3 @@
-class JokerInOutput < Exception; end
-
 class Solitaire
   attr_accessor :deck
 
@@ -117,3 +115,5 @@ class Deck
   end
 
 end
+
+class JokerInOutput < Exception; end
