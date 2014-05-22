@@ -1,9 +1,9 @@
 class Solitaire
   attr_accessor :deck
 
-  def initialize( deck, text="" )
-    @text = text.gsub(' ', '').upcase
-    @deck = deck
+  def initialize( opts={} )
+    @text = opts.fetch(:text){ "" }.gsub(' ', '').upcase
+    @deck = opts.fetch(:deck){ Deck.new }
     @alphanum = Hash[("A".."Z").to_a.zip((1..26).to_a)]
     @numalpha = @alphanum.invert
   end

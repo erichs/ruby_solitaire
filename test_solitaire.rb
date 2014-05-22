@@ -24,29 +24,28 @@ describe Deck do
   end
 
   it "performs a cyclic downward move of a named card by 1" do
-    deck = Solitaire.new(Deck.new(->{ [ "AC", "JokerA", "3H", "2D" ] })).deck
+    deck = Deck.new(->{ [ "AC", "JokerA", "3H", "2D" ] })
     deck.move_down!("JokerA", 1)
     deck.cards.must_equal [ "AC", "3H", "JokerA", "2D" ]
 
-    deck = Solitaire.new(Deck.new(->{ [ "AC", "3H", "JokerA", "2D" ] })).deck
+    deck = Deck.new(->{ [ "AC", "3H", "JokerA", "2D" ] })
     deck.move_down!("JokerA", 1)
     deck.cards.must_equal [ "AC", "3H", "2D", "JokerA" ]
   end
 
   it "performs a cyclic downward move of a named card by 2" do
-    deck = Solitaire.new(Deck.new(->{ [ "AC", "JokerA", "3H", "2D", "4S" ] })).deck
+    deck = Deck.new(->{ [ "AC", "JokerA", "3H", "2D", "4S" ] })
     deck.move_down!("JokerA", 2)
     deck.cards.must_equal [ "AC", "3H", "2D", "JokerA", "4S" ]
 
-    deck = Solitaire.new(Deck.new(->{ [ "AC", "3H", "JokerA", "2D" ] })).deck
+    deck = Deck.new(->{ [ "AC", "3H", "JokerA", "2D" ] })
     deck.move_down!("JokerA", 2)
     deck.cards.must_equal [ "AC", "JokerA", "3H", "2D" ]
   end
 
   it "performs a 'count cut': displacing N cards from the top to just above the bottom card" do
-    s = Solitaire.new Deck.new(->{ [ "4C", "3C", "AC", "2C" ] })
-    deck = s.deck
-    deck.count_cut! s.card_to_number(deck.cards.last)
+    deck = Deck.new(->{ [ "4C", "3C", "AC", "2C" ] })
+    deck.count_cut! Solitaire.new.card_to_number(deck.cards.last)
     deck.cards.must_equal [ "AC", "4C", "3C", "2C" ]
   end
 
@@ -68,27 +67,27 @@ end
 describe Solitaire do
 
   it "converts letters to numbers" do
-    s = Solitaire.new( Deck.new )
+    s = Solitaire.new
     s.letter_to_number("A").must_equal 1
     s.letter_to_number("Z").must_equal 26
     proc{s.letter_to_number(":")}.must_raise ArgumentError, :NotALetter
   end
 
   it "converts numbers to letters" do
-    s = Solitaire.new( Deck.new )
+    s = Solitaire.new
     s.number_to_letter(1).must_equal "A"
     s.number_to_letter(26).must_equal "Z"
     proc{s.number_to_letter(27)}.must_raise ArgumentError, :NotAValidNumber
   end
 
   it "breaks a string into 5 character, padded blocks" do
-    s = Solitaire.new( Deck.new )
+    s = Solitaire.new
     s.display_block("CODEINRUBYLIVELONGER").must_equal "CODEI NRUBY LIVEL ONGER"
     s.display_block("DRINKYOUROVALTINE").must_equal "DRINK YOURO VALTI NEXXX"
   end
 
   it "maps cards to numbers" do
-    s = Solitaire.new( Deck.new )
+    s = Solitaire.new
     s.card_to_number("AC").must_equal (1 + 0)
     s.card_to_number("2D").must_equal (2 + 13)
     s.card_to_number("3H").must_equal (3 + 26)
@@ -107,15 +106,15 @@ describe Solitaire do
   end
 
   it "finds an output card" do
-    s = Solitaire.new( Deck.new(->{["AC", "2D", "3H"]}) )
+    s = Solitaire.new( :deck => Deck.new(->{["AC", "2D", "3H"]}) )
     s.find_output_card.must_equal "2D"
 
-    s = Solitaire.new( Deck.new(->{["2C", "2D", "JokerA", "3H"]}) )
+    s = Solitaire.new( :deck => Deck.new(->{["2C", "2D", "JokerA", "3H"]}) )
     proc{s.find_output_card}.must_raise JokerInOutput
   end
 
   it "generates a keystream number" do
-    s = Solitaire.new( Deck.new )
+    s = Solitaire.new
     s.generate_keystream_number!.must_equal 4
     s.generate_keystream_number!.must_equal 49
     s.generate_keystream_number!.must_equal 10
@@ -129,12 +128,12 @@ describe Solitaire do
   end
 
   it "enciphers a plaintext" do
-    s = Solitaire.new( Deck.new, "AAAAAAAAAA" )
+    s = Solitaire.new( :text => "AAAAAAAAAA" )
     s.display_block(s.cipher(:encrypt)).must_equal "EXKYI ZSGEH"
   end
 
   it "deciphers a ciphertext" do
-    s = Solitaire.new( Deck.new, "EXKYI ZSGEH" )
+    s = Solitaire.new( :text => "EXKYI ZSGEH" )
     s.display_block(s.cipher(:decrypt)).must_equal "AAAAA AAAAA"
   end
 end
