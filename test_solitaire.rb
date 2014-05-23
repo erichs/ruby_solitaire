@@ -129,12 +129,12 @@ describe Solitaire do
   end
 
   it 'enciphers a plaintext' do
-    s = Solitaire.new(text: 'AAAAAAAAAA')
-    s.block_format(s.cipher(:encrypt)).must_equal 'EXKYI ZSGEH'
+    s = Solitaire.new
+    s.cipher(:encrypt, 'AAAAAAAAAA').must_equal 'EXKYI ZSGEH'
   end
 
   it 'deciphers a ciphertext' do
-    s = Solitaire.new(text: 'EXKYI ZSGEH')
-    s.block_format(s.cipher(:decrypt)).must_equal 'AAAAA AAAAA'
+    s = Solitaire.new
+    s.cipher(:decrypt, 'EXKYI ZSGEH').must_equal 'AAAAA AAAAA'
   end
 end

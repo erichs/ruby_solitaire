@@ -3,27 +3,27 @@
 # example usage:
 # require './solitaire'
 #
-# s = Solitaire.new(:text => "DRINK YOURO VALTI NEXXX")
-# puts s.block_format s.cipher(:encrypt)
+# s = Solitaire.new
+# puts s.cipher(:encrypt, "DRINKYOUROVALTINE")
 # HOSLS XGAVV PNEBY IZPVH
 #
-# s = Solitaire.new(:text => "HOSLS XGAVV PNEBY IZPVH")
-# puts s.block_format s.cipher(:decrypt)
+# s = Solitaire.new()
+# puts s.cipher(:decrypt, "HOSLS XGAVV PNEBY IZPVH")
 # DRINK YOURO VALTI NEXXX
 
 class Solitaire
   attr_accessor :deck
 
   def initialize(opts = {})
-    @text = opts.fetch(:text) { '' }.gsub(' ', '').upcase
     @deck = opts.fetch(:deck) { Deck.new }
     @alphanum = Hash[('A'..'Z').to_a.zip((1..26).to_a)]
     @numalpha = @alphanum.invert
   end
 
-  def cipher(direction)
+  def cipher(direction, text)
+    text = block_format(text).gsub(' ', '')
     cipher = ''
-    @text.split(//).each do |letter|
+    text.split(//).each do |letter|
       stream_number = generate_keystream_number!
       letter_number = letter_to_number letter
 
@@ -37,11 +37,11 @@ class Solitaire
 
       cipher += number_to_letter ciphered_number
     end
-    cipher
+    block_format cipher
   end
 
   def block_format(text)
-    chunks = text.scan(/.{1,5}/)
+    chunks = text.upcase.gsub(' ', '').scan(/.{1,5}/)
     chunks[-1] = chunks.last.ljust(5, 'X')
     chunks.join ' '
   end
