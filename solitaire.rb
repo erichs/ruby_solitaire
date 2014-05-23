@@ -1,3 +1,16 @@
+# Implements Bruce Schneier's 'Solitaire' cipher
+#
+# example usage:
+# require './solitaire'
+#
+# s = Solitaire.new(:text => "DRINK YOURO VALTI NEXXX")
+# puts s.display_block s.cipher(:encrypt)
+# HOSLS XGAVV PNEBY IZPVH
+#
+# s = Solitaire.new(:text => "HOSLS XGAVV PNEBY IZPVH")
+# puts s.display_block s.cipher(:decrypt)
+# DRINK YOURO VALTI NEXXX
+
 class Solitaire
   attr_accessor :deck
 
