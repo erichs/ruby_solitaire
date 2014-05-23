@@ -21,7 +21,7 @@ class Solitaire
   end
 
   def key!(passphrase)
-    passphrase.split(//).each do |letter|
+    passphrase.gsub(' ', '').split(//).each do |letter|
       begin
         @deck.move_down! 'JokerA', 1
         @deck.move_down! 'JokerB', 2
