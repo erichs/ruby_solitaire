@@ -4,11 +4,11 @@
 # require './solitaire'
 #
 # s = Solitaire.new(:text => "DRINK YOURO VALTI NEXXX")
-# puts s.display_block s.cipher(:encrypt)
+# puts s.block_format s.cipher(:encrypt)
 # HOSLS XGAVV PNEBY IZPVH
 #
 # s = Solitaire.new(:text => "HOSLS XGAVV PNEBY IZPVH")
-# puts s.display_block s.cipher(:decrypt)
+# puts s.block_format s.cipher(:decrypt)
 # DRINK YOURO VALTI NEXXX
 
 class Solitaire
@@ -40,7 +40,7 @@ class Solitaire
     cipher
   end
 
-  def display_block(text)
+  def block_format(text)
     chunks = text.scan(/.{1,5}/)
     chunks[-1] = chunks.last.ljust(5, 'X')
     chunks.join ' '

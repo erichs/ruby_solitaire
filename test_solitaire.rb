@@ -102,8 +102,8 @@ describe Solitaire do
 
   it 'breaks a string into 5 character, padded blocks' do
     s = Solitaire.new
-    s.display_block('CODEINRUBYLIVELONGER').must_equal 'CODEI NRUBY LIVEL ONGER'
-    s.display_block('DRINKYOUROVALTINE').must_equal 'DRINK YOURO VALTI NEXXX'
+    s.block_format('CODEINRUBYLIVELONGER').must_equal 'CODEI NRUBY LIVEL ONGER'
+    s.block_format('DRINKYOUROVALTINE').must_equal 'DRINK YOURO VALTI NEXXX'
   end
 
   it 'finds an output card' do
@@ -130,11 +130,11 @@ describe Solitaire do
 
   it 'enciphers a plaintext' do
     s = Solitaire.new(text: 'AAAAAAAAAA')
-    s.display_block(s.cipher(:encrypt)).must_equal 'EXKYI ZSGEH'
+    s.block_format(s.cipher(:encrypt)).must_equal 'EXKYI ZSGEH'
   end
 
   it 'deciphers a ciphertext' do
     s = Solitaire.new(text: 'EXKYI ZSGEH')
-    s.display_block(s.cipher(:decrypt)).must_equal 'AAAAA AAAAA'
+    s.block_format(s.cipher(:decrypt)).must_equal 'AAAAA AAAAA'
   end
 end
