@@ -1,15 +1,15 @@
 class Solitaire
   attr_accessor :deck
 
-  def initialize( opts={} )
-    @text = opts.fetch(:text){ "" }.gsub(' ', '').upcase
-    @deck = opts.fetch(:deck){ Deck.new }
-    @alphanum = Hash[("A".."Z").to_a.zip((1..26).to_a)]
+  def initialize(opts = {})
+    @text = opts.fetch(:text) { '' }.gsub(' ', '').upcase
+    @deck = opts.fetch(:deck) { Deck.new }
+    @alphanum = Hash[('A'..'Z').to_a.zip((1..26).to_a)]
     @numalpha = @alphanum.invert
   end
 
-  def cipher( direction )
-    cipher = ""
+  def cipher(direction)
+    cipher = ''
     @text.split(//).each do |letter|
       stream_number = generate_keystream_number!
       letter_number = letter_to_number letter
@@ -27,32 +27,32 @@ class Solitaire
     cipher
   end
 
-  def display_block( text )
+  def display_block(text)
     chunks = text.scan(/.{1,5}/)
-    chunks[-1] = chunks.last.ljust(5, "X")
-    chunks.join " "
+    chunks[-1] = chunks.last.ljust(5, 'X')
+    chunks.join ' '
   end
 
-  def letter_to_number( letter )
+  def letter_to_number(letter)
     letter = letter.upcase
-    raise ArgumentError, :NotALetter unless ("A".."Z").include? letter
+    fail ArgumentError, :NotALetter unless ('A'..'Z').include? letter
     @alphanum[letter]
   end
 
-  def number_to_letter( number )
-    raise ArgumentError, :NotAValidNumber unless (1..26).include? number
+  def number_to_letter(number)
+    fail ArgumentError, :NotAValidNumber unless (1..26).include? number
     @numalpha[number]
   end
 
   def find_output_card
     @deck.cards[@deck.card_to_number(@deck.cards.first)].tap do |card|
-      raise JokerInOutput if !!card.match(/Joker/)
+      fail JokerInOutput if card.match(/Joker/)
     end
   end
 
   def generate_keystream_number!
-    @deck.move_down! "JokerA", 1
-    @deck.move_down! "JokerB", 2
+    @deck.move_down! 'JokerA', 1
+    @deck.move_down! 'JokerB', 2
     @deck.triple_cut!
     @deck.count_cut!
     @deck.card_to_number(find_output_card)
@@ -64,7 +64,7 @@ end
 class Deck
   attr_accessor :cards
 
-  def initialize( key_method = -> { Deck.unkeyed_positions } )
+  def initialize(key_method = -> { Deck.unkeyed_positions })
     @key_method = key_method
     @cards = key_method.call
   end
@@ -83,7 +83,7 @@ class Deck
     deck_size = @cards.count
 
     # positions of first and second jokers from top of deck
-    first, second = [@cards.index("JokerA"), @cards.index("JokerB")].sort
+    first, second = [@cards.index('JokerA'), @cards.index('JokerB')].sort
 
     top_cut = @cards.shift first
     bottom_cut = @cards.pop deck_size - second - 1
@@ -91,11 +91,11 @@ class Deck
     @cards = bottom_cut + @cards + top_cut
   end
 
-  def card_to_number( card )
+  def card_to_number(card)
     name, suit = card.scan(/(.*)(.$)/).flatten
     return 53 if name == 'Joker'
-    base_values = {'A'=>1, '2'=>2, '3'=>3, '4'=>4, '5'=>5, '6'=>6, '7'=>7, '8'=>8, '9'=>9, '10'=>10, 'J'=>11, 'Q'=>12, 'K'=>13}
-    modifiers = {'C'=>0, 'D'=> 13, 'H'=>26, 'S'=>39}
+    base_values = { 'A' => 1, '2' => 2, '3' => 3, '4' => 4, '5' => 5, '6' => 6, '7' => 7, '8' => 8, '9' => 9, '10' => 10, 'J' => 11, 'Q' => 12, 'K' => 13 }
+    modifiers = { 'C' => 0, 'D' => 13, 'H' => 26, 'S' => 39 }
     base_values[name] + modifiers[suit]
   end
 
@@ -107,13 +107,12 @@ class Deck
   def self.unkeyed_positions
     cards = []
     names = ['A', ('2'..'10').to_a, 'J', 'Q', 'K'].flatten
-    suits  = ['C', 'D', 'H', 'S']
+    suits  = %w(C D H S)
     suits.each do |suit|
       cards << names.map { |name| name + suit }
     end
-    cards = (cards + ['JokerA', 'JokerB']).flatten
+    cards = (cards + %w(JokerA JokerB)).flatten
   end
-
 end
 
 class JokerInOutput < Exception; end
