@@ -128,6 +128,23 @@ describe Solitaire do
     s.generate_keystream_number!.must_equal 33
   end
 
+  it 'keys a deck to a passphrase' do
+    s = Solitaire.new
+    s.key! 'FOO'
+    s.generate_keystream_number!.must_equal 8
+    s.generate_keystream_number!.must_equal 19
+    s.generate_keystream_number!.must_equal 7
+    s.generate_keystream_number!.must_equal 25
+    s.generate_keystream_number!.must_equal 20
+    s.generate_keystream_number!.must_equal 9
+    s.generate_keystream_number!.must_equal 8
+    s.generate_keystream_number!.must_equal 22
+
+    s = Solitaire.new
+    s.key! 'CRYPTONOMICON'
+    s.cipher(:encrypt, 'SOLITAIRE').must_equal 'KIRAK SFJAN'
+  end
+
   it 'enciphers a plaintext' do
     s = Solitaire.new
     s.cipher(:encrypt, 'AAAAAAAAAA').must_equal 'EXKYI ZSGEH'

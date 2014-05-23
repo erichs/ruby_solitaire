@@ -20,6 +20,20 @@ class Solitaire
     @numalpha = @alphanum.invert
   end
 
+  def key!(passphrase)
+    passphrase.split(//).each do |letter|
+      begin
+        @deck.move_down! 'JokerA', 1
+        @deck.move_down! 'JokerB', 2
+        @deck.triple_cut!
+        @deck.count_cut!
+        @deck.count_cut! letter_to_number(letter)
+      rescue JokerInOutput
+        retry
+      end
+    end
+  end
+
   def cipher(direction, text)
     text = block_format(text).gsub(' ', '')
     algorithm = {:encrypt => :+, :decrypt => :-}
@@ -109,8 +123,9 @@ class Deck
     base_values[name] + modifiers[suit]
   end
 
-  def count_cut!
-    cut = @cards.shift card_to_number @cards.last
+  def count_cut!(count=nil)
+    count ||= card_to_number @cards.last
+    cut = @cards.shift count
     @cards.insert(-2, *cut)
   end
 
