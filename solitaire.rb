@@ -22,18 +22,15 @@ class Solitaire
 
   def cipher(direction, text)
     text = block_format(text).gsub(' ', '')
+    algorithm = {:encrypt => :+, :decrypt => :-}
     cipher = ''
+
     text.split(//).each do |letter|
       stream_number = generate_keystream_number!
       letter_number = letter_to_number letter
 
-      if direction == :encrypt
-        ciphered_number = (letter_number + stream_number) % 26
-      else
-        ciphered_number = (letter_number - stream_number) % 26
-      end
-      # adjust for Z=26, which has modulus of zero...
-      ciphered_number = 26 if ciphered_number == 0
+      ciphered_number = letter_number.send(algorithm[direction], stream_number) % 26
+      ciphered_number = 26 if ciphered_number == 0  # adjust for Z=26, which has modulus of 0
 
       cipher += number_to_letter ciphered_number
     end
