@@ -86,60 +86,7 @@ end
 
 describe Solitaire do
 
-  it 'converts letters to numbers' do
-    s = Solitaire.new
-    s.letter_to_number('A').must_equal 1
-    s.letter_to_number('Z').must_equal 26
-    proc { s.letter_to_number(':') }.must_raise ArgumentError, :NotALetter
-  end
-
-  it 'converts numbers to letters' do
-    s = Solitaire.new
-    s.number_to_letter(1).must_equal 'A'
-    s.number_to_letter(26).must_equal 'Z'
-    proc { s.number_to_letter(27) }.must_raise ArgumentError, :NotAValidNumber
-  end
-
-  it 'breaks a string into 5 character, padded blocks' do
-    s = Solitaire.new
-    s.block_format('CODEINRUBYLIVELONGER').must_equal 'CODEI NRUBY LIVEL ONGER'
-    s.block_format('DRINKYOUROVALTINE').must_equal 'DRINK YOURO VALTI NEXXX'
-  end
-
-  it 'finds an output card' do
-    s = Solitaire.new(deck: Deck.new(-> { %w(AC 2D 3H) }))
-    s.find_output_card.must_equal '2D'
-
-    s = Solitaire.new(deck: Deck.new(-> { %w(2C 2D JokerA 3H) }))
-    proc { s.find_output_card }.must_raise JokerInOutput
-  end
-
-  it 'generates a keystream number' do
-    s = Solitaire.new
-    s.generate_keystream_number!.must_equal 4
-    s.generate_keystream_number!.must_equal 49
-    s.generate_keystream_number!.must_equal 10
-    s.generate_keystream_number!.must_equal 24
-    s.generate_keystream_number!.must_equal 8
-    s.generate_keystream_number!.must_equal 51
-    s.generate_keystream_number!.must_equal 44
-    s.generate_keystream_number!.must_equal 6
-    s.generate_keystream_number!.must_equal 4
-    s.generate_keystream_number!.must_equal 33
-  end
-
   it 'keys a deck to a passphrase' do
-    s = Solitaire.new
-    s.key! 'FOO'
-    s.generate_keystream_number!.must_equal 8
-    s.generate_keystream_number!.must_equal 19
-    s.generate_keystream_number!.must_equal 7
-    s.generate_keystream_number!.must_equal 25
-    s.generate_keystream_number!.must_equal 20
-    s.generate_keystream_number!.must_equal 9
-    s.generate_keystream_number!.must_equal 8
-    s.generate_keystream_number!.must_equal 22
-
     s = Solitaire.new
     s.key! 'CRYPTONOMICON'
     s.cipher(:encrypt, 'SOLITAIRE').must_equal 'KIRAK SFJAN'

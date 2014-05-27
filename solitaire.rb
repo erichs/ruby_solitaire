@@ -51,38 +51,40 @@ class Solitaire
     block_format cipher
   end
 
-  def block_format(text)
-    chunks = text.upcase.gsub(' ', '').scan(/.{1,5}/)
-    chunks[-1] = chunks.last.ljust(5, 'X')
-    chunks.join ' '
-  end
+  private
 
-  def letter_to_number(letter)
-    letter = letter.upcase
-    fail ArgumentError, :NotALetter unless ('A'..'Z').include? letter
-    @alphanum[letter]
-  end
+      def block_format(text)
+        chunks = text.upcase.gsub(' ', '').scan(/.{1,5}/)
+        chunks[-1] = chunks.last.ljust(5, 'X')
+        chunks.join ' '
+      end
 
-  def number_to_letter(number)
-    fail ArgumentError, :NotAValidNumber unless (1..26).include? number
-    @numalpha[number]
-  end
+      def letter_to_number(letter)
+        letter = letter.upcase
+        fail ArgumentError, :NotALetter unless ('A'..'Z').include? letter
+        @alphanum[letter]
+      end
 
-  def find_output_card
-    @deck.cards[@deck.card_to_number(@deck.cards.first)].tap do |card|
-      fail JokerInOutput if card.match(/Joker/)
-    end
-  end
+      def number_to_letter(number)
+        fail ArgumentError, :NotAValidNumber unless (1..26).include? number
+        @numalpha[number]
+      end
 
-  def generate_keystream_number!
-    @deck.move_down! 'JokerA', 1
-    @deck.move_down! 'JokerB', 2
-    @deck.triple_cut!
-    @deck.count_cut!
-    @deck.card_to_number(find_output_card)
-  rescue JokerInOutput
-    retry
-  end
+      def find_output_card
+        @deck.cards[@deck.card_to_number(@deck.cards.first)].tap do |card|
+          fail JokerInOutput if card.match(/Joker/)
+        end
+      end
+
+      def generate_keystream_number!
+        @deck.move_down! 'JokerA', 1
+        @deck.move_down! 'JokerB', 2
+        @deck.triple_cut!
+        @deck.count_cut!
+        @deck.card_to_number(find_output_card)
+      rescue JokerInOutput
+        retry
+      end
 end
 
 class Deck
